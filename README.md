@@ -14,6 +14,10 @@ To learn how to develop MetaMask-compatible applications, visit our [Developer D
 
 To learn how to contribute to the MetaMask codebase, visit our [Contributor Docs](https://github.com/MetaMask/contributor-docs).
 
+## App Preview
+
+![MetaMask Mobile App](docs/confirmation-refactoring/send/send_confirm.png)
+
 ## Documentation
 
 - [Architecture](./docs/readme/architecture.md)
