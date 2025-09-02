@@ -16,6 +16,7 @@ import { AvatarSize } from '../../../../../component-library/components/Avatars/
 import AvatarToken from '../../../../../component-library/components/Avatars/Avatar/variants/AvatarToken';
 import Icon, {
   IconName,
+  IconSize,
 } from '../../../../../component-library/components/Icons/Icon';
 import Badge, {
   BadgeVariant,
@@ -488,8 +489,8 @@ export const TokenListItem = React.memo(
             style={styles.favoriteButton}
           >
             <Icon
-              name={isFavorite ? IconName.Heart : IconName.HeartOutline}
-              size={20}
+              name={isFavorite ? IconName.HeartFilled : IconName.Heart}
+              size={IconSize.Md}
               color={
                 isFavorite ? colors.error.default : colors.icon.alternative
               }
