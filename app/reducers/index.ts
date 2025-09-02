@@ -36,6 +36,7 @@ import performanceReducer, {
   PerformanceState,
 } from '../core/redux/slices/performance';
 import cardReducer from '../core/redux/slices/card';
+import favoriteTokensReducer from '../core/redux/slices/favoriteTokens';
 import { isTest } from '../util/test/utils';
 
 /**
@@ -125,6 +126,7 @@ export interface RootState {
   bridge: StateFromReducer<typeof bridgeReducer>;
   banners: BannersState;
   card: StateFromReducer<typeof cardReducer>;
+  favoriteTokens: StateFromReducer<typeof favoriteTokensReducer>;
   performance?: PerformanceState;
   cronjobController: StateFromReducer<typeof cronjobControllerReducer>;
 }
@@ -162,6 +164,7 @@ const baseReducers = {
   bridge: bridgeReducer,
   banners: bannersReducer,
   card: cardReducer,
+  favoriteTokens: favoriteTokensReducer,
   confirmationMetrics: confirmationMetricsReducer,
   cronjobController: cronjobControllerReducer,
 };

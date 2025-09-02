@@ -37,6 +37,12 @@ export function sortAssets<T>(
   const { key, order = 'asc', sortCallback } = criteria;
 
   return [...array].sort((a, b) => {
+    // Always prioritize favorite tokens at the top
+    const aFavorite = (a as { isFavorite?: boolean }).isFavorite;
+    const bFavorite = (b as { isFavorite?: boolean }).isFavorite;
+    if (aFavorite && !bFavorite) return -1;
+    if (!aFavorite && bFavorite) return 1;
+
     const aValue = getNestedValue(a, key);
     const bValue = getNestedValue(b, key);
 
