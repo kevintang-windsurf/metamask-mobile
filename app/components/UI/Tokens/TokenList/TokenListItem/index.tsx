@@ -8,12 +8,15 @@ import {
 } from '@metamask/utils';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo } from 'react';
-import { View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { View, TouchableOpacity } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import I18n, { strings } from '../../../../../../locales/i18n';
 
 import { AvatarSize } from '../../../../../component-library/components/Avatars/Avatar';
 import AvatarToken from '../../../../../component-library/components/Avatars/Avatar/variants/AvatarToken';
+import Icon, {
+  IconName,
+} from '../../../../../component-library/components/Icons/Icon';
 import Badge, {
   BadgeVariant,
 } from '../../../../../component-library/components/Badges/Badge';
@@ -74,6 +77,10 @@ import { FlashListAssetKey } from '..';
 import { makeSelectAssetByAddressAndChainId } from '../../../../../selectors/multichain';
 import useEarnTokens from '../../../Earn/hooks/useEarnTokens';
 import {
+  selectIsFavoriteToken,
+  toggleFavoriteToken,
+} from '../../../../../core/redux/slices/favoriteTokens';
+import {
   selectPooledStakingEnabledFlag,
   selectStablecoinLendingEnabledFlag,
 } from '../../../Earn/selectors/featureFlags';
@@ -98,6 +105,7 @@ export const TokenListItem = React.memo(
   }: TokenListItemProps) => {
     const { trackEvent, createEventBuilder } = useMetrics();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const { colors } = useTheme();
 
     const isEvmNetworkSelected = useSelector(selectIsEvmNetworkSelected);
@@ -148,6 +156,14 @@ export const TokenListItem = React.memo(
     const styles = createStyles(colors);
 
     const pricePercentChange1d = useTokenPricePercentageChange(asset);
+
+    const isFavorite = useSelector((state: RootState) =>
+      selectIsFavoriteToken(state, {
+        address: asset?.address || '',
+        chainId: chainId || '',
+        isStaked: asset?.isStaked,
+      }),
+    );
 
     // Market data selectors
     const exchangeRates = useSelector((state: RootState) =>
@@ -338,6 +354,18 @@ export const TokenListItem = React.memo(
       });
     };
 
+    const onFavoritePress = useCallback(() => {
+      if (asset && chainId) {
+        dispatch(
+          toggleFavoriteToken({
+            address: asset.address,
+            chainId,
+            isStaked: asset.isStaked,
+          }),
+        );
+      }
+    }, [dispatch, asset, chainId]);
+
     const renderNetworkAvatar = useCallback(() => {
       if (!asset) {
         return null;
@@ -453,6 +481,20 @@ export const TokenListItem = React.memo(
             ) : null}
             {renderEarnCta()}
           </View>
+        </View>
+        <View style={styles.favoriteContainer}>
+          <TouchableOpacity
+            onPress={onFavoritePress}
+            style={styles.favoriteButton}
+          >
+            <Icon
+              name={isFavorite ? IconName.Heart : IconName.HeartOutline}
+              size={20}
+              color={
+                isFavorite ? colors.error.default : colors.icon.alternative
+              }
+            />
+          </TouchableOpacity>
         </View>
         <ScamWarningIcon
           asset={asset}

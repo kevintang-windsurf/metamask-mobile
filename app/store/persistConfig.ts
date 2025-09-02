@@ -9,6 +9,7 @@ import Device from '../util/device';
 import { UserState } from '../reducers/user';
 import Engine, { EngineContext } from '../core/Engine';
 import { getPersistentState } from './getPersistentState/getPersistentState';
+import { favoriteTokensTransform } from '../core/redux/slices/favoriteTokens';
 
 const TIMEOUT = 40000;
 const STORAGE_THROTTLE_DELAY = 200;
@@ -141,6 +142,7 @@ const persistConfig = {
     persistTransform,
     persistUserTransform,
     persistOnboardingTransform,
+    favoriteTokensTransform,
   ],
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
   migrate: createMigrate(migrations, {

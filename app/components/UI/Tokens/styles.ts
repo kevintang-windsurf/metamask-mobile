@@ -241,6 +241,15 @@ const createStyles = (colors: Colors) =>
     badge: {
       marginTop: 8,
     },
+    favoriteContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 8,
+    },
+    favoriteButton: {
+      padding: 8,
+      borderRadius: 20,
+    },
   });
 
 export default createStyles;

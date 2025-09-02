@@ -20,4 +20,5 @@ export interface TokenI {
   chainId?: string;
   isNative?: boolean;
   ticker?: string;
+  isFavorite?: boolean;
 }

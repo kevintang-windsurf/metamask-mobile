@@ -7,6 +7,7 @@ import { initialState as confirmationMetrics } from '../../core/redux/slices/con
 import { initialState as originThrottling } from '../../core/redux/slices/originThrottling';
 import { initialState as initialBridgeState } from '../../core/redux/slices/bridge';
 import { initialState as initialCardState } from '../../core/redux/slices/card';
+import { initialState as initialFavoriteTokensState } from '../../core/redux/slices/favoriteTokens';
 import initialBackgroundState from './initial-background-state.json';
 import { userInitialState } from '../../reducers/user';
 import { initialNavigationState } from '../../reducers/navigation';
@@ -59,6 +60,7 @@ const initialRootState: RootState = {
     dismissedBanners: [],
   },
   card: initialCardState,
+  favoriteTokens: initialFavoriteTokensState,
 };
 
 if (isTest) {

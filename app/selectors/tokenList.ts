@@ -19,6 +19,7 @@ import { TraceName, endTrace, trace } from '../util/trace';
 import { getTraceTags } from '../util/sentry/tags';
 import { store } from '../store';
 import { createDeepEqualSelector } from './util';
+import { selectFavoriteTokens } from '../core/redux/slices/favoriteTokens';
 
 const _selectSortedTokenKeys = createSelector(
   [
@@ -26,6 +27,7 @@ const _selectSortedTokenKeys = createSelector(
     selectEvmTokenFiatBalances,
     selectIsEvmNetworkSelected,
     selectTokenSortConfig,
+    selectFavoriteTokens,
     ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
     (state: RootState) => {
       const selectedAccount = selectSelectedInternalAccount(state);
@@ -38,6 +40,7 @@ const _selectSortedTokenKeys = createSelector(
     tokenFiatBalances,
     isEvmSelected,
     tokenSortConfig,
+    favoriteTokens,
     ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
     nonEvmTokens,
     ///: END:ONLY_INCLUDE_IF
@@ -49,10 +52,21 @@ const _selectSortedTokenKeys = createSelector(
 
     const tokenListData = isEvmSelected ? evmTokens : nonEvmTokens;
 
-    const tokensWithBalances: TokenI[] = tokenListData.map((token, i) => ({
-      ...token,
-      tokenFiatAmount: isEvmSelected ? tokenFiatBalances[i] : token.balanceFiat,
-    }));
+    const tokensWithBalances: TokenI[] = tokenListData.map((token, i) => {
+      const staked = (token as { isStaked?: boolean }).isStaked
+        ? 'staked'
+        : 'unstaked';
+      const tokenId = `${token.address}-${token.chainId}-${staked}`;
+      const isFavorite = favoriteTokens.has(tokenId);
+
+      return {
+        ...token,
+        tokenFiatAmount: isEvmSelected
+          ? tokenFiatBalances[i]
+          : token.balanceFiat,
+        isFavorite,
+      };
+    });
 
     const tokensSorted = sortAssets(tokensWithBalances, tokenSortConfig);
 
