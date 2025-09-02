@@ -1,5 +1,7 @@
 ![MetaMask logo](logo.png?raw=true)
 
+<!-- Updated by Devin for testing PR workflow -->
+
 # MetaMask
 
 [![CI](https://github.com/MetaMask/metamask-mobile/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/MetaMask/metamask-mobile/actions/workflows/ci.yml) [![CLA](https://github.com/MetaMask/metamask-mobile/actions/workflows/cla.yml/badge.svg?branch=main)](https://github.com/MetaMask/metamask-mobile/actions/workflows/cla.yml)
@@ -11,6 +13,10 @@ For up to the minute news, follow our [Twitter](https://twitter.com/metamask) or
 To learn how to develop MetaMask-compatible applications, visit our [Developer Docs](https://docs.metamask.io).
 
 To learn how to contribute to the MetaMask codebase, visit our [Contributor Docs](https://github.com/MetaMask/contributor-docs).
+
+## App Preview
+
+![MetaMask Mobile App](docs/confirmation-refactoring/send/send_confirm.png)
 
 ## Documentation
 
