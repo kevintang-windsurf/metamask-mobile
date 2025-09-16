@@ -24,7 +24,7 @@ import ToastModal from './pages/wallet/ToastModal';
 import TestDApp from './pages/Browser/TestDApp';
 import SolanaNewFeatureSheet from './pages/wallet/SolanaNewFeatureSheet';
 import OnboardingSheet from './pages/Onboarding/OnboardingSheet';
-import Matchers from './utils/Matchers';
+import Matchers from './utils/Matchers.js';
 import { BrowserViewSelectorsIDs } from './selectors/Browser/BrowserView.selectors';
 
 const LOCALHOST_URL = `http://localhost:${getGanachePort()}/`;

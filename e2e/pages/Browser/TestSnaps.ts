@@ -18,7 +18,7 @@ import TestHelpers from '../../helpers';
 import Assertions from '../../framework/Assertions';
 import { IndexableWebElement } from 'detox/detox';
 import Utilities from '../../framework/Utilities';
-import LegacyGestures from '../../utils/Gestures';
+import LegacyGestures from '../../utils/Gestures.js';
 import { ConfirmationFooterSelectorIDs } from '../../selectors/Confirmation/ConfirmationView.selectors';
 import { waitForTestSnapsToLoad } from '../../viewHelper';
 import { RetryOptions } from '../../framework';
