@@ -6,7 +6,7 @@ import {
   getMockServerPort,
   getSecondTestDappPort,
 } from './framework/fixtures/FixtureUtils';
-import Utilities from './utils/Utilities';
+import Utilities from './utils/Utilities.js';
 import { resolveConfig } from 'detox/internals';
 
 export default class TestHelpers {

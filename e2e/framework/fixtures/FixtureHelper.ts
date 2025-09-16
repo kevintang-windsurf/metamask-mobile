@@ -11,7 +11,7 @@ import {
   getLocalTestDappPort,
   getMockServerPort,
 } from './FixtureUtils';
-import Utilities from '../../utils/Utilities';
+import Utilities from '../../utils/Utilities.js';
 import TestHelpers from '../../helpers';
 import {
   startMockServer,

@@ -1,7 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-shadow, jsdoc/check-indentation */
 import { blacklistURLs } from '../resources/blacklistURLs.json';
-import { waitFor } from 'detox';
 // eslint-disable-next-line import/no-nodejs-modules
 import { setTimeout as asyncSetTimeout } from 'node:timers/promises';
+
+interface WaitForStabilityOptions {
+  timeout?: number;
+  interval?: number;
+  stableCount?: number;
+}
+
+interface WaitUntilOptions {
+  interval: number;
+  timeout: number;
+}
 
 export default class Utilities {
   /**
@@ -10,14 +21,14 @@ export default class Utilities {
    * for use in a regex pattern, designed to match any one of the provided strings exactly.
    * The resulting string is suitable for inclusion in a larger regex pattern.
    *
-   * @param {string[]} regexstrings - An array of strings to be formatted for exact matching in a regex pattern.
-   * @returns {string} A string formatted for exact matching within a regex pattern,
+   * @param regexstrings - An array of strings to be formatted for exact matching in a regex pattern.
+   * @returns A string formatted for exact matching within a regex pattern,
    *                    encapsulating the input strings in a way that they can be matched as literals.
    * @example
    * // returns '\\("apple","banana","cherry"\\)'
    * formatForExactMatchGroup(['apple', 'banana', 'cherry']);
    */
-  static formatForExactMatchGroup(regexstrings) {
+  static formatForExactMatchGroup(regexstrings: string[]): string {
     return `\\("${regexstrings.join('","')}"\\)`;
   }
 
@@ -27,22 +38,22 @@ export default class Utilities {
    * suitable for matching any one of the blacklisted URLs exactly. The `blacklistURLs` should be defined
    * within the class or accessible in the class context.
    *
-   * @returns {string} A regex pattern string formatted for exact matching of blacklisted URLs.
+   * @returns A regex pattern string formatted for exact matching of blacklisted URLs.
    * @example
    */
-  static get BlacklistURLs() {
+  static get BlacklistURLs(): string {
     return this.formatForExactMatchGroup(blacklistURLs);
   }
 
   static async waitForElementToBeEnabled(
-    element,
-    timeout = 3500,
-    interval = 100,
-  ) {
+    element: Promise<Detox.IndexableNativeElement>,
+    timeout: number = 3500,
+    interval: number = 100,
+  ): Promise<void> {
     const startTime = Date.now();
     let isEnabled = false;
     while (Date.now() - startTime < timeout) {
-      isEnabled = await (await element).getAttributes();
+      isEnabled = ((await (await element).getAttributes()) as any).enabled;
       if (isEnabled) {
         break;
       }
@@ -56,22 +67,24 @@ export default class Utilities {
   /**
    * Waits for an element to become stable (not moving) by checking its position multiple times.
    *
-   * @param {Promise<Detox.IndexableNativeElement>} element - The element to check for stability
-   * @param {Object} [options={}] - Configuration options
-   * @param {number} [options.timeout=5000] - Maximum time to wait for stability (ms)
-   * @param {number} [options.interval=200] - Time between position checks (ms)
-   * @param {number} [options.stableCount=3] - Number of consecutive stable checks required
+   * @param element - The element to check for stability
+   * @param options - Configuration options
    */
-  static async waitForElementToStopMoving(element, options = {}) {
+  static async waitForElementToStopMoving(
+    element: Promise<Detox.IndexableNativeElement>,
+    options: WaitForStabilityOptions = {},
+  ): Promise<void> {
     const { timeout = 5000, interval = 200, stableCount = 3 } = options;
     let lastPosition = null;
     let stableChecks = 0;
     const fallBackTimeout = 2000;
     const start = Date.now();
 
-    const getPosition = async (element) => {
+    const getPosition = async (
+      element: Detox.IndexableNativeElement,
+    ): Promise<{ x: number; y: number } | null> => {
       try {
-        const attributes = await element.getAttributes();
+        const attributes = (await element.getAttributes()) as any;
         if (
           attributes.frame &&
           typeof attributes.frame.x === 'number' &&
@@ -118,14 +131,15 @@ export default class Utilities {
    *
    * Note: Copied directly from the extension implementation
    *
-   * @param {() => Promise<boolean>} condition - The condition to wait for. This function must return a boolean indicating whether the condition is met.
-   * @param {object} options - Options for the wait.
-   * @param {number} options.timeout - The maximum amount of time (in milliseconds) to wait for the condition to be met.
-   * @param {number} options.interval - The interval (in milliseconds) between checks for the condition.
-   * @returns {Promise<void>} A promise that resolves when the condition is met or the timeout is reached.
-   * @throws {Error} Throws an error if the condition is not met within the timeout period.
+   * @param condition - The condition to wait for. This function must return a boolean indicating whether the condition is met.
+   * @param options - Options for the wait.
+   * @returns A promise that resolves when the condition is met or the timeout is reached.
+   * @throws Throws an error if the condition is not met within the timeout period.
    */
-  static async waitUntil(condition, { interval, timeout }) {
+  static async waitUntil(
+    condition: () => Promise<boolean>,
+    { interval, timeout }: WaitUntilOptions,
+  ): Promise<void> {
     const startTime = Date.now();
     const endTime = startTime + timeout;
 
